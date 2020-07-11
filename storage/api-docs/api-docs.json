@@ -1,0 +1,1446 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Blog API",
+        "description": "Open API v3.0 documentation for the Blog API",
+        "contact": {
+            "email": "git@ahowell.io"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Blog API Server"
+        }
+    ],
+    "paths": {
+        "/comments/{id}": {
+            "get": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Gets a single comment by comment id",
+                "description": "Returns a single comment by comment id, including the id of the post it relates to and the user that made it",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommentResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Updates an existing comment by comment id",
+                "description": "Updates an existing comment by comment id and then returns the comment, including the id of the\n    post it relates to and the user that made it",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommentUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommentResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Deletes a comment by comment id",
+                "description": "Deletes an existing comment by comment id and returns no content",
+                "operationId": "destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Comment id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/comments": {
+            "post": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Creates a new comment",
+                "description": "Creates a new comment and then returns the comment, including the id of the post it relates to\n            and the user that made it",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommentStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommentResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/posts": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Gets all posts",
+                "description": "Returns all posts along with user that created it and any associated tags",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PostResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Creates a new post and establishes links to associated tags",
+                "description": "Creates a new post, establishes links to associated tags and then returns the post",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PostRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/posts/{id}": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Gets a single post by post id",
+                "description": "Returns a single post by post id along with user that created it and any associated tags",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Post id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Updates an existing post by post id",
+                "description": "Updates an existing post by post id and any links to associated tags and returns the result. If\n    a tag id is not included in the update request, its association with the post will be removed",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Post id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PostRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Deletes a post by post id",
+                "description": "Deletes a post by post id and returns no content",
+                "operationId": "destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Post id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/posts/{id}/comments": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Gets a single post by post id and any comments",
+                "description": "Returns a single post by post id along with user that created it, any associated tags and its comments",
+                "operationId": "showWithComments",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Post id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PostWithCommentsResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/tags": {
+            "get": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Gets all tags",
+                "description": "Returns all tags",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TagResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Creates a new tag",
+                "description": "Creates a new tag and then returns the tag",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TagRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TagResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/tags/{id}": {
+            "get": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Gets a single tag by tag id",
+                "description": "Returns a single tag by tag id",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Tag id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TagResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Updates an existing tag by tag id",
+                "description": "Updates an existing tag by tag id and returns the result",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Tag id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TagRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TagResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Deletes a tag by tag id",
+                "description": "Deletes a tag by tag id and returns no content",
+                "operationId": "destroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Tag id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/tags/{id}/posts": {
+            "get": {
+                "tags": [
+                    "Tags"
+                ],
+                "summary": "Gets a single tag by tag id and any posts related to it",
+                "description": "Gets a single tag by tag id and any posts related to it",
+                "operationId": "showWithPosts",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Tag id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TagWithPostsResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Allows an admin user to return all users, their roles and associated permissions",
+                "description": "Allows an admin user to return all users, their roles and associated permissions",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserRolePermissionResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Signs a user up",
+                "description": "Signs a user up, does not automatically log them in",
+                "operationId": "store",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserSignupRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Allows a user to get their own details, and admins to get other users details (including the\n            permissions of the users role)",
+                "description": "Allows a user to get their own details, and admins to get other users details (including the\n            permissions of the users role)",
+                "operationId": "show",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserRolePermissionResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Allows an admin user to disable a user's account and then logs them out",
+                "description": "Allows an admin to disable a user's account and then logs them out",
+                "operationId": "destroyUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    }
+                }
+            }
+        },
+        "/user/roles": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Allows an admin to return all available roles and their permissions",
+                "description": "Allows an admin to return all available roles and their permissions",
+                "operationId": "showRoles",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RolePermissionResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logs out the currently logged in user",
+                "description": "Logs out the currently logged in user",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logs a user in",
+                "description": "Logs a user in after they have successfully signed up",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        },
+        "/user/{user}": {
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Allows a user to update their own details, and admins to update other users details (including the\n            role)",
+                "description": "Allows a user to update their own details, and admins to update other users details (including\n            the role. If a non-admin user includes a roles array in the request the roles entry in the request is ignored)",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRoleRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserRolePermissionResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CommentStoreRequest": {
+                "properties": {
+                    "body": {
+                        "schema": "CommentStoreRequest",
+                        "description": "Body of the post",
+                        "type": "string"
+                    },
+                    "post_id": {
+                        "schema": "CommentStoreRequest",
+                        "description": "post id the comment belongs to",
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "type": "object"
+            },
+            "CommentUpdateRequest": {
+                "properties": {
+                    "body": {
+                        "schema": "CommentUpdateRequest",
+                        "description": "Body of the post",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PostRequest": {
+                "properties": {
+                    "title": {
+                        "schema": "PostRequest",
+                        "description": "Post title",
+                        "type": "string"
+                    },
+                    "body": {
+                        "schema": "PostRequest",
+                        "description": "Body of the post",
+                        "type": "string"
+                    },
+                    "tags": {
+                        "schema": "PostRequest",
+                        "description": "Array of tag ids related to this post",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "TagRequest": {
+                "properties": {
+                    "title": {
+                        "schema": "TagRequest",
+                        "description": "Tag title, max 32 characters",
+                        "type": "string"
+                    },
+                    "color": {
+                        "schema": "TagRequest",
+                        "description": "Color of the tag in full rgb format including the leading # e.g: #FF00FF",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UserLoginRequest": {
+                "properties": {
+                    "email": {
+                        "schema": "UserLoginRequest",
+                        "description": "User's email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "schema": "UserLoginRequest",
+                        "description": "User's password",
+                        "type": "string"
+                    },
+                    "remember_me": {
+                        "schema": "UserLoginRequest",
+                        "description": "Whether or not to remember the user for 30 days instead of a single day",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "UserRequest": {
+                "properties": {
+                    "displayname": {
+                        "schema": "UserRequest",
+                        "description": "Optional new display name for the user",
+                        "type": "string"
+                    },
+                    "email": {
+                        "schema": "UserRequest",
+                        "description": "Optional new email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "schema": "UserRequest",
+                        "description": "Optional new password, must be minumum of 10 characters with one upper and lower case\n            character, one number and one special character",
+                        "type": "string"
+                    },
+                    "password_confirmation": {
+                        "schema": "UserRequest",
+                        "description": "Password confirmation, must match password, required if password is to be amended",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UserRoleRequest": {
+                "properties": {
+                    "displayname": {
+                        "schema": "UserRoleRequest",
+                        "description": "Optional new display name for the user",
+                        "type": "string"
+                    },
+                    "email": {
+                        "schema": "UserRoleRequest",
+                        "description": "Optional new email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "schema": "UserRoleRequest",
+                        "description": "Optional new password, must be minumum of 10 characters with one upper and lower case\n            character, one number and one special character",
+                        "type": "string"
+                    },
+                    "password_confirmation": {
+                        "schema": "UserRoleRequest",
+                        "description": "Password confirmation, must match password, required if password is to be amended",
+                        "type": "string"
+                    },
+                    "roles": {
+                        "schema": "UserRoleRequest",
+                        "description": "Array of role ids assigned to the user",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UserSignupRequest": {
+                "properties": {
+                    "displayname": {
+                        "schema": "UserSignupRequest",
+                        "description": "Desired display name for the user",
+                        "type": "string"
+                    },
+                    "email": {
+                        "schema": "UserSignupRequest",
+                        "description": "User's email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "schema": "UserSignupRequest",
+                        "description": "User's password, must be minumum of 10 characters with one upper and lower case character, one\n            number and one special character",
+                        "type": "string"
+                    },
+                    "password_confirmation": {
+                        "schema": "UserSignupRequest",
+                        "description": "User's password confirmation, must match password",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CommentResource": {
+                "properties": {
+                    "id": {
+                        "schema": "CommentResource",
+                        "description": "Comment id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "body": {
+                        "schema": "CommentResource",
+                        "description": "Body of the comment",
+                        "type": "string"
+                    },
+                    "post_id": {
+                        "schema": "CommentResource",
+                        "description": "Id of the post this comment relates to",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "created_at": {
+                        "schema": "CommentResource",
+                        "description": "Date and time the comment was created",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "schema": "CommentResource",
+                        "description": "Date and time the comment was last updated",
+                        "type": "string"
+                    },
+                    "author": {
+                        "$ref": "#/components/schemas/UserResource"
+                    }
+                },
+                "type": "object"
+            },
+            "LoginResource": {
+                "properties": {
+                    "userid": {
+                        "schema": "LoginResource",
+                        "description": "User id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "displayname": {
+                        "schema": "LoginResource",
+                        "description": "The logged in user's displayname",
+                        "type": "string"
+                    },
+                    "roles": {
+                        "schema": "LoginResource",
+                        "description": "All roles assigned to the logged in user",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RolePermissionResource"
+                        }
+                    },
+                    "access_token": {
+                        "schema": "LoginResource",
+                        "description": "Access token for logged in user",
+                        "type": "string"
+                    },
+                    "token_type": {
+                        "schema": "LoginResource",
+                        "description": "Type of the token",
+                        "type": "string"
+                    },
+                    "expires_at": {
+                        "schema": "LoginResource",
+                        "description": "Date and time the token will expire",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PostCommentResource": {
+                "properties": {
+                    "id": {
+                        "schema": "PostCommentResource",
+                        "description": "Comment id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "body": {
+                        "schema": "PostCommentResource",
+                        "description": "Body of the comment",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "schema": "PostCommentResource",
+                        "description": "Date and time the comment was created",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "schema": "PostCommentResource",
+                        "description": "Date and time the comment was last updated",
+                        "type": "string"
+                    },
+                    "author": {
+                        "$ref": "#/components/schemas/UserResource"
+                    }
+                },
+                "type": "object"
+            },
+            "PostResource": {
+                "properties": {
+                    "id": {
+                        "schema": "PostResource",
+                        "description": "Post id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "title": {
+                        "schema": "PostResource",
+                        "description": "Post title",
+                        "type": "string"
+                    },
+                    "body": {
+                        "schema": "PostResource",
+                        "description": "Body of the post",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "schema": "PostResource",
+                        "description": "Date and time the post was created",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "schema": "PostResource",
+                        "description": "Date and time the post was last updated",
+                        "type": "string"
+                    },
+                    "author": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
+                    "tags": {
+                        "schema": "PostResource",
+                        "description": "Tags related to this post",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TagResource"
+                        }
+                    },
+                    "comment_count": {
+                        "schema": "PostResource",
+                        "description": "Number of comments related to this post",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "PostWithCommentsResource": {
+                "properties": {
+                    "id": {
+                        "schema": "PostWithCommentsResource",
+                        "description": "Post id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "title": {
+                        "schema": "PostWithCommentsResource",
+                        "description": "Post title",
+                        "type": "string"
+                    },
+                    "body": {
+                        "schema": "PostWithCommentsResource",
+                        "description": "Body of the post",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "schema": "PostWithCommentsResource",
+                        "description": "Date and time the post was created",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "schema": "PostWithCommentsResource",
+                        "description": "Date and time the post was last updated",
+                        "type": "string"
+                    },
+                    "author": {
+                        "$ref": "#/components/schemas/UserResource"
+                    },
+                    "tags": {
+                        "schema": "PostWithCommentsResource",
+                        "description": "Tags related to this post",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TagResource"
+                        }
+                    },
+                    "comments": {
+                        "schema": "PostWithCommentsResource",
+                        "description": "Comments on this post",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CommentResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "RolePermissionResource": {
+                "properties": {
+                    "id": {
+                        "schema": "RolePermissionResource",
+                        "description": "User id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "schema": "RolePermissionResource",
+                        "description": "Name of the role",
+                        "type": "string"
+                    },
+                    "permissions": {
+                        "schema": "RolePermissionResource",
+                        "description": "ADMIN VISIBLE ONLY: Permissions assigned to the role",
+                        "type": "array",
+                        "items": {
+                            "description": "Permission name",
+                            "type": "string"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "TagPostResource": {
+                "properties": {
+                    "id": {
+                        "schema": "TagPostResource",
+                        "description": "Post id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "title": {
+                        "schema": "TagPostResource",
+                        "description": "Post title",
+                        "type": "string"
+                    },
+                    "body": {
+                        "schema": "TagPostResource",
+                        "description": "Body of the post",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "schema": "TagPostResource",
+                        "description": "Date and time the post was created",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "schema": "TagPostResource",
+                        "description": "Date and time the post was last updated",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "TagResource": {
+                "properties": {
+                    "id": {
+                        "schema": "TagResource",
+                        "description": "Tag id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "title": {
+                        "schema": "TagResource",
+                        "description": "Tag title",
+                        "type": "string"
+                    },
+                    "color": {
+                        "schema": "TagResource",
+                        "description": "Tag color",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "TagWithPostsResource": {
+                "properties": {
+                    "id": {
+                        "schema": "TagWithPostsResource",
+                        "description": "Tag id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "title": {
+                        "schema": "TagWithPostsResource",
+                        "description": "Tag title",
+                        "type": "string"
+                    },
+                    "color": {
+                        "schema": "TagWithPostsResource",
+                        "description": "Tag color",
+                        "type": "string"
+                    },
+                    "posts": {
+                        "schema": "TagWithPostsResource",
+                        "description": "Posts associated with the tag",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PostResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UserResource": {
+                "properties": {
+                    "id": {
+                        "schema": "UserResource",
+                        "description": "User id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "displayname": {
+                        "schema": "UserResource",
+                        "description": "Display name of the user",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UserRolePermissionResource": {
+                "properties": {
+                    "id": {
+                        "schema": "UserRolePermissionResource",
+                        "description": "User id",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "displayname": {
+                        "schema": "UserRolePermissionResource",
+                        "description": "Display name of the user",
+                        "type": "string"
+                    },
+                    "enabled": {
+                        "schema": "UserRolePermissionResource",
+                        "description": "ADMIN VISIBLE ONLY: Whether or not the user is enabled",
+                        "type": "boolean"
+                    },
+                    "roles": {
+                        "schema": "UserRolePermissionResource",
+                        "description": "All roles assigned to the user",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RolePermissionResource"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
