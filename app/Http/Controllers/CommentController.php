@@ -60,8 +60,7 @@ class CommentController extends Controller
      *      operationId="store",
      *      tags={"Comments"},
      *      summary="Creates a new comment",
-     *      description="Creates a new comment and then returns the comment, including the id of the post it relates to
-            and the user that made it",
+     *      description="Creates a new comment and then returns the comment, including the id of the post it relates to and the user that made it",
      *      @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(ref="#/components/schemas/CommentStoreRequest")
@@ -101,8 +100,7 @@ class CommentController extends Controller
      *      operationId="update",
      *      tags={"Comments"},
      *      summary="Updates an existing comment by comment id",
-     *      description="Updates an existing comment by comment id and then returns the comment, including the id of the
-    post it relates to and the user that made it",
+     *      description="Updates an existing comment by comment id and then returns the comment, including the id of the post it relates to and the user that made it",
      *      @OA\Parameter(
      *          name="id",
      *          description="Comment id",

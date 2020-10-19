@@ -10,7 +10,6 @@ class StrippedLength implements Rule
 
     /**
      * Create a new rule instance.
-     *
      */
     public function __construct($maxAllowedLength)
     {

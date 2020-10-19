@@ -20,8 +20,7 @@ use Illuminate\Foundation\Http\FormRequest;
  *      @OA\Property(
  *          property="password",
  *          type="string",
- *          description="Optional new password, must be minumum of 10 characters with one upper and lower case
-            character, one number and one special character"
+ *          description="Optional new password, must be minumum of 10 characters with one upper and lower case character, one number and one special character"
  *      ),
  *      @OA\Property(
  *          property="password_confirmation",
